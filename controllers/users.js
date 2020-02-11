@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const escape = require('escape-html');
 
 const User = require('../models/user');
-const { SECRET_KEY } = require('../middlewares/auth');
+const { SECRET_KEY } = require('../consts');
 const NotFoundError = require('../errors/error-not-found');
 const { TOKEN_TYPE } = require('../consts');
 const { ERR_USER_NOT_FOUND } = require('../consts/errors');
@@ -60,7 +60,6 @@ module.exports.login = async (req, res, next) => {
 
     res.cookie(TOKEN_TYPE, token, cookieConfig);
     res.end();
-
   } catch (error) {
     next(error);
   }

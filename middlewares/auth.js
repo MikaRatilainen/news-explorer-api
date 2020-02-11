@@ -19,6 +19,5 @@ const auth = (req, res, next) => {
 };
 
 module.exports = {
-  SECRET_KEY,
   auth,
 };

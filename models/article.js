@@ -30,6 +30,14 @@ const articleSchema = new mongoose.Schema({
       message: handleURLError,
     },
   },
+  image: {
+    type: String,
+    required: true,
+    validate: {
+      validator: validateURL,
+      message: handleURLError,
+    },
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',

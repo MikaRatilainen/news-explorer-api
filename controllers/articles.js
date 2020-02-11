@@ -15,13 +15,15 @@ module.exports.readArticles = async (req, res, next) => {
     }
 
     res.send({ data: articles });
-  } catch(error) {
+  } catch (error) {
     next(error);
   }
 };
 
 module.exports.createArticle = async (req, res, next) => {
-  const { keyword, title, text, date, source, link } = req.body;
+  const {
+    keyword, title, text, date, source, link, image,
+  } = req.body;
 
   try {
     const article = await Articles.create({
@@ -31,6 +33,7 @@ module.exports.createArticle = async (req, res, next) => {
       date: escape(date),
       source: escape(source),
       link: escape(link),
+      image: escape(image),
       owner: req.user._id,
     });
     if (!article) {
@@ -38,7 +41,7 @@ module.exports.createArticle = async (req, res, next) => {
     }
 
     res.send({ data: article });
-  } catch(error) {
+  } catch (error) {
     next(error);
   }
 };
@@ -48,7 +51,7 @@ module.exports.deleteArticle = async (req, res, next) => {
 
   const { _id } = req.user;
   try {
-    const article = await Articles.findById(articleId).select('+owner')
+    const article = await Articles.findById(articleId).select('+owner');
     if (!article) {
       throw new NotFoundError(ERR_ARTICLE_NOT_FOUND);
     }
@@ -56,7 +59,7 @@ module.exports.deleteArticle = async (req, res, next) => {
     const isUserArticleOwner = String(_id) === String(article.owner);
 
     if (isUserArticleOwner) {
-      await Articles.findByIdAndRemove(articleId)
+      await Articles.findByIdAndRemove(articleId);
       res.send({ message: RESOURCE_UPDATED, success: true });
     } else {
       throw new ForbiddenError(ERR_DELETE_NOT_ALLOWED);
