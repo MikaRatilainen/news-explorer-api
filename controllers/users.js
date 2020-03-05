@@ -55,11 +55,17 @@ module.exports.login = async (req, res, next) => {
   try {
     const user = await User.findUserByCredentials(email, password);
 
+    const userData = {
+      _id: user._doc._id,
+      name: user._doc.name,
+      email: user._doc.email,
+    };
+
     const payload = { _id: user._id };
     const token = jwt.sign(payload, SECRET_KEY, jwtConfig);
 
-    res.cookie(TOKEN_TYPE, token, cookieConfig);
-    res.end();
+    // res.cookie(TOKEN_TYPE, token, cookieConfig);
+    res.send({ data: token });
   } catch (error) {
     next(error);
   }
